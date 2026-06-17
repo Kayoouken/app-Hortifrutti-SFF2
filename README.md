@@ -27,9 +27,10 @@ Uso intensivo do **Pydantic** no FastAPI. O backend exige tipagem estrita (como 
 
 ## ⚙️ Como executar o projeto localmente
 
-**1. Clone o repositório:**
+**1. Clone o repositório e acesse a pasta:**
 ```bash
-git clone https://github.com/SEU_USUARIO/app_SFF2.git
+git clone https://github.com/Kayoouken/app-Hortifrutti-SFF2.git
+cd app-Hortifrutti-SFF2
 ```
 
 *(Adicione aqui as instruções para rodar o backend com `uvicorn main:app --reload` e o frontend com `npm run dev`)*

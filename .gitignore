@@ -1,16 +1,18 @@
-# Backend (Python / FastAPI)
+# Python / Backend
 __pycache__/
 *.py[cod]
 *$py.class
-.venv/
 venv/
 env/
+*.sqlite3
 *.db
 .env
 
-# Frontend (Node / Vue)
+# Node / Frontend
 node_modules/
-frontend/node_modules/
 dist/
-frontend/dist/
+.npm/
+
+# OS Files
 .DS_Store
+Thumbs.db

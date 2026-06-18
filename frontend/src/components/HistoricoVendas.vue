@@ -190,6 +190,8 @@ import { ref, reactive, onMounted, computed } from 'vue';
 
 // Arquivo limpo: As funções de PDF e o import do html2pdf foram removidos.
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const vendas = ref([]);
 const clientes = ref([]);
 const produtos = ref([]);
@@ -281,10 +283,10 @@ const carregarVendas = async () => {
   carregando.value = true;
   try {
     const [resVendas, resClientes, resProdutos, resUnidades] = await Promise.all([
-      fetch('http://localhost:8000/vendas/'),
-      fetch('http://localhost:8000/clientes/'),
-      fetch('http://localhost:8000/produtos/'),
-      fetch('http://localhost:8000/unidades/')
+      fetch(`${API_URL}/vendas/`),
+      fetch(`${API_URL}/clientes/`),
+      fetch(`${API_URL}/produtos/`),
+      fetch(`${API_URL}/unidades/`)
     ]);
     
     if (resClientes.ok) clientes.value = await resClientes.json();
@@ -426,7 +428,7 @@ const salvarEdicao = async () => {
   };
 
   try {
-    const response = await fetch(`http://localhost:8000/vendas/${vendaSelecionada.value.id}`, {
+    const response = await fetch(`${API_URL}/vendas/${vendaSelecionada.value.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -602,7 +604,7 @@ const apagarVenda = async (id) => {
   if (!confirm(`Tem certeza que deseja cancelar (apagar) a venda #${id}? Esta ação não pode ser desfeita e removerá os registros do faturamento.`)) return;
   
   try {
-    const response = await fetch(`http://localhost:8000/vendas/${id}`, {
+    const response = await fetch(`${API_URL}/vendas/${id}`, {
       method: 'DELETE'
     });
     

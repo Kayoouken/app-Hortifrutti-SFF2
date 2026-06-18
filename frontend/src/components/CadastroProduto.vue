@@ -148,6 +148,8 @@
 import { ref, onMounted, computed } from 'vue';
 import { criarProduto, fetchProdutos, fetchUnidades, vincularPreco } from '../api';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const nome = ref('');
 const descricao = ref('');
 const salvando = ref(false);
@@ -172,8 +174,8 @@ const carregarDados = async () => {
   // Cria unidades básicas de forma silenciosa se o BD estiver vazio
   if (unids.length === 0) {
     try {
-      await fetch("http://localhost:8000/unidades/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sigla: "KG", nome: "Quilograma" }) });
-      await fetch("http://localhost:8000/unidades/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sigla: "UN", nome: "Unidade" }) });
+      await fetch(`${API_URL}/unidades/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sigla: "KG", nome: "Quilograma" }) });
+      await fetch(`${API_URL}/unidades/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ sigla: "UN", nome: "Unidade" }) });
       unids = await fetchUnidades();
     } catch(e) {}
   }
@@ -264,7 +266,7 @@ const salvar = async () => {
 const apagarProduto = async (id) => {
   if (!confirm("Tem certeza que deseja apagar este produto e todos os seus preços?")) return;
   try {
-    const res = await fetch(`http://localhost:8000/produtos/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_URL}/produtos/${id}`, { method: 'DELETE' });
     if (res.ok) {
       mensagem.value = { texto: 'Produto apagado com sucesso!', tipo: 'sucesso' };
       menuAberto.value = null;
@@ -280,7 +282,7 @@ const apagarProduto = async (id) => {
 
 const salvarEdicaoInfo = async (produto) => {
   try {
-    const res = await fetch(`http://localhost:8000/produtos/${produto.id}`, {
+    const res = await fetch(`${API_URL}/produtos/${produto.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

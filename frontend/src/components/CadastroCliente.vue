@@ -72,6 +72,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const clientes = ref([]);
 const salvando = ref(false);
 const mensagem = ref({ texto: '', tipo: '' });
@@ -80,7 +82,7 @@ const novoCliente = ref({ nome: '', cpf_cnpj: '', telefone: '', email: '' });
 
 const carregarClientes = async () => {
   try {
-    const res = await fetch('http://localhost:8000/clientes/');
+    const res = await fetch(`${API_URL}/clientes/`);
     if (res.ok) clientes.value = await res.json();
   } catch (error) {
     console.error("Erro ao carregar clientes", error);
@@ -107,7 +109,7 @@ const salvarCliente = async () => {
   };
 
   try {
-    const res = await fetch('http://localhost:8000/clientes/', {
+    const res = await fetch(`${API_URL}/clientes/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

@@ -3,21 +3,33 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
+import os
 
 import models
 import schemas
 from database import engine, get_db
 
-# Cria as tabelas no banco de dados (idealmente depois usaremos o Alembic para migrações)
-models.Base.metadata.create_all(bind=engine)
+try:
+    # Cria as tabelas no banco de dados (idealmente depois usaremos o Alembic para migrações)
+    models.Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"⚠️ AVISO: Erro ao conectar com o banco de dados durante a inicialização: {e}")
 
 app = FastAPI(title="Hortifruti PDV API")
 
-# Configuração de CORS para permitir que o Vue.js consuma a API
+# Lemos a variável de ambiente. Se não existir, libera o localhost do Vue.
+cors_env = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+CORS_ORIGINS = [origin.strip() for origin in cors_env.split(",") if origin.strip()]
+
+# FastAPI bloqueia allow_credentials=True quando usamos allow_origins=["*"].
+# Ajustamos dinamicamente para evitar crash no servidor.
+is_credentials_allowed = False if "*" in CORS_ORIGINS else True
+
+# Configuração de CORS segura
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Em produção, substituir pelo domínio exato do frontend
-    allow_credentials=True,
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=is_credentials_allowed,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -104,6 +116,21 @@ def vincular_preco_produto(produto_id: int, preco: schemas.ProdutoPrecoCreate, d
     except Exception:
         db.rollback()
         raise HTTPException(status_code=400, detail="Este produto já possui um preço para esta unidade de medida.")
+
+@app.put("/precos/{preco_id}", response_model=schemas.ProdutoPrecoResponse, tags=["Preços"])
+def atualizar_preco_expresso(preco_id: int, preco_update: schemas.ProdutoPrecoUpdate, db: Session = Depends(get_db)):
+    db_preco = db.query(models.ProdutoPreco).filter(models.ProdutoPreco.id == preco_id).first()
+    if not db_preco:
+        raise HTTPException(status_code=404, detail="Preço não encontrado.")
+    
+    db_preco.preco_venda = preco_update.preco_venda
+    try:
+        db.commit()
+        db.refresh(db_preco)
+        return db_preco
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Erro ao atualizar o preço.")
 
 # --- Rotas de Clientes ---
 @app.post("/clientes/", response_model=schemas.ClienteResponse, tags=["Clientes"])

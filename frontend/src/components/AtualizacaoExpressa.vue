@@ -55,7 +55,7 @@ import { ref, onMounted } from 'vue';
 const linhas = ref([]);
 const carregando = ref(true);
 
-const API_URL = "http://localhost:8000"; // Ajuste conforme necessário caso use api.js centralizada
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const carregarDados = async () => {
   carregando.value = true;

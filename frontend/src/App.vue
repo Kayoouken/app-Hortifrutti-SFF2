@@ -43,6 +43,7 @@
       <CadastroCliente v-if="telaAtual === 'clientes'" />
       
       <CadastroProduto v-if="telaAtual === 'produtos'" />
+      <AtualizacaoExpressa v-if="telaAtual === 'precos'" />
     </main>
   </div>
 </template>
@@ -55,6 +56,7 @@ import NovaVenda from './components/NovaVenda.vue';
 import CadastroCliente from './components/CadastroCliente.vue';
 import CadastroProduto from './components/CadastroProduto.vue';
 import HistoricoVendas from './components/HistoricoVendas.vue';
+import AtualizacaoExpressa from './components/AtualizacaoExpressa.vue';
 
 // Define qual tela será aberta por padrão (pdv)
 const telaAtual = ref('pdv');
@@ -65,7 +67,8 @@ const menuItems = [
   { id: 'pdv', nome: 'Frente de Caixa (PDV)', icone: '🏷️' },
   { id: 'historico', nome: 'Histórico de Vendas', icone: '📜' },
   { id: 'clientes', nome: 'Gestão de Clientes', icone: '👥' },
-  { id: 'produtos', nome: 'Catálogo de Produtos', icone: '📦' }
+  { id: 'produtos', nome: 'Catálogo de Produtos', icone: '📦' },
+  { id: 'precos', nome: 'Atualização Expressa', icone: '⚡' }
 ];
 </script>
 

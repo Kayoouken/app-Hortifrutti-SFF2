@@ -140,6 +140,8 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { fetchProdutos } from '../api';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 const emit = defineEmits(['venda-ativa']);
 const props = defineProps({ ativa: Boolean });
 
@@ -159,7 +161,7 @@ const mostrarDropdownCliente = ref(false);
 onMounted(async () => {
   todosProdutos.value = await fetchProdutos();
   try {
-    const res = await fetch('http://localhost:8000/unidades/');
+    const res = await fetch(`${API_URL}/unidades/`);
     if (res.ok) {
       let unids = await res.json();
       
@@ -174,13 +176,13 @@ onMounted(async () => {
       let precisaAtualizar = false;
       for (let up of unidadesPadrao) {
         if (!unids.find(u => u.sigla === up.sigla)) {
-          await fetch("http://localhost:8000/unidades/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(up) });
+          await fetch(`${API_URL}/unidades/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(up) });
           precisaAtualizar = true;
         }
       }
       
       if (precisaAtualizar) {
-        const resNova = await fetch('http://localhost:8000/unidades/');
+        const resNova = await fetch(`${API_URL}/unidades/`);
         unids = await resNova.json();
       }
       
@@ -189,7 +191,7 @@ onMounted(async () => {
   } catch(e) { console.error("Erro ao carregar unidades", e); }
 
   try {
-    const resCli = await fetch('http://localhost:8000/clientes/');
+    const resCli = await fetch(`${API_URL}/clientes/`);
     if (resCli.ok) {
       todosClientes.value = await resCli.json();
     }
@@ -201,11 +203,11 @@ watch(() => props.ativa, async (isAtiva) => {
   if (isAtiva) {
     todosProdutos.value = await fetchProdutos(); // Puxa produtos novos que foram recém cadastrados
     try {
-      const resCli = await fetch('http://localhost:8000/clientes/');
+      const resCli = await fetch(`${API_URL}/clientes/`);
       if (resCli.ok) todosClientes.value = await resCli.json(); // Puxa novos clientes
     } catch(e) {}
     try {
-      const resUni = await fetch('http://localhost:8000/unidades/');
+      const resUni = await fetch(`${API_URL}/unidades/`);
       if (resUni.ok) unidades.value = await resUni.json(); // Puxa novas unidades
     } catch(e) {}
   }
@@ -265,7 +267,7 @@ const confirmarCliente = async () => {
 
   // Tenta registrar silenciosamente o cliente no backend para guardar o histórico
   try {
-    const res = await fetch('http://localhost:8000/clientes/', {
+    const res = await fetch(`${API_URL}/clientes/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -358,7 +360,7 @@ const totalVenda = computed(() => {
 });
 
 const registrarVendaAPI = async (payload) => {
-  const response = await fetch('http://localhost:8000/vendas/', {
+  const response = await fetch(`${API_URL}/vendas/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)

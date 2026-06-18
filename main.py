@@ -18,7 +18,7 @@ except Exception as e:
 app = FastAPI(title="Hortifruti PDV API")
 
 # Lemos a variável de ambiente. Se não existir, libera o localhost do Vue.
-cors_env = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
+cors_env = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,https://app-feirao-hortifruti.netlify.app")
 CORS_ORIGINS = [origin.strip() for origin in cors_env.split(",") if origin.strip()]
 
 # FastAPI bloqueia allow_credentials=True quando usamos allow_origins=["*"].

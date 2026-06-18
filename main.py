@@ -254,3 +254,8 @@ def relatorio_faturamento_diario(db: Session = Depends(get_db)):
     )
     
     return [{"data": r.data, "faturamento_total": r.faturamento_total or 0, "quantidade_vendas": r.quantidade_vendas} for r in resultados]
+
+# --- Rota Raiz (Health Check do Render) ---
+@app.get("/", tags=["Health Check"])
+def read_root():
+    return {"status": "online", "mensagem": "API do Hortifruti SFF2 funcionando perfeitamente!"}

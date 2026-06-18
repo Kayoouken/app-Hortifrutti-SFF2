@@ -1,15 +1,15 @@
-# SFF2 (Super Feirão das Frutas 2) 🍎🥦
+# SFF2 (Super Feirão das Frutas 2) 
 
 Sistema Full-Stack de Frente de Caixa (PDV) e Gestão (ERP) focado no varejo de hortifruti. Desenvolvido do zero para criar um fluxo de vendas ágil para os caixas e um painel de gestão eficiente, garantindo a integridade dos dados e uma ótima experiência de uso (UX).
 
-## 💻 Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 *   **Frontend:** Vue.js 3 (Composition API), HTML5, CSS3 avançado (Flexbox, Grid).
 *   **Backend:** Python 3, FastAPI.
 *   **Banco de Dados & ORM:** SQLite / SQLAlchemy.
 *   **Validação de Dados:** Pydantic.
 
-## 🚀 Principais Funcionalidades e Desafios Resolvidos
+##  Principais Funcionalidades e Desafios Resolvidos
 
 ### 1. Controle de Transações ACID (Integridade Financeira)
 A rota de finalização de vendas (`/vendas/`) utiliza `db.commit()` e `db.rollback()` atômicos no SQLAlchemy. Isso garante que uma venda só seja registrada no banco de dados se **todos** os seus itens também forem salvos corretamente. Se ocorrer qualquer falha na validação de valores totais ou erro de rede, o sistema reverte a operação, prevenindo itens de venda "órfãos".
@@ -25,7 +25,7 @@ Uso intensivo do **Pydantic** no FastAPI. O backend exige tipagem estrita (como 
 *   **Edição Expressa:** Interfaces em formato de planilha que salvam dados de forma assíncrona, oferecendo um uso rápido e sem interrupções.
 *   **Imutabilidade de Histórico:** Alterações de preços atuais não afetam os recibos e histórico de vendas já finalizadas, garantindo segurança fiscal/gerencial.
 
-## ⚙️ Como executar o projeto localmente
+##  Como executar o projeto localmente
 
 **1. Clone o repositório e acesse a pasta:**
 ```bash
